@@ -1,0 +1,105 @@
+{
+    "POST": {
+        "nombre_serie": "Makeine "
+    },
+    "FILES": {
+        "imagen_serie": {
+            "name": "images.jpg",
+            "type": "image\/jpeg",
+            "tmp_name": "C:\\xampp\\tmp\\phpD1AC.tmp",
+            "error": 0,
+            "size": 50580
+        }
+    },
+    "REQUEST_METHOD": "POST"
+}
+{
+    "POST": {
+        "nombre": "Makeine"
+    },
+    "FILES": {
+        "imagen_serie": {
+            "name": "images.jpg",
+            "type": "image\/jpeg",
+            "tmp_name": "C:\\xampp\\tmp\\php2C62.tmp",
+            "error": 0,
+            "size": 50580
+        }
+    },
+    "REQUEST_METHOD": "POST"
+}
+{
+    "POST": {
+        "nombre": "Date a Live"
+    },
+    "FILES": {
+        "imagen_serie": {
+            "name": "de707dd407813cd84cee719b2eacfddbbea779f82c57f630f6f22859e69b145e._BR-6_AC_SX720_FMjpg_.jpg",
+            "type": "image\/jpeg",
+            "tmp_name": "C:\\xampp\\tmp\\php5DA5.tmp",
+            "error": 0,
+            "size": 59211
+        }
+    },
+    "REQUEST_METHOD": "POST"
+}
+{
+    "POST": {
+        "nombre": "Rurouni Kenshin"
+    },
+    "FILES": {
+        "imagen_serie": {
+            "name": "7e2be57e65f6e4f21fa5f5baa0669d66.webp",
+            "type": "image\/webp",
+            "tmp_name": "C:\\xampp\\tmp\\php9581.tmp",
+            "error": 0,
+            "size": 34474
+        }
+    },
+    "REQUEST_METHOD": "POST"
+}
+{
+    "POST": {
+        "nombre": "Railgun"
+    },
+    "FILES": {
+        "imagen_serie": {
+            "name": "To-Aru-Kagaku-no-Railgun-3.webp",
+            "type": "image\/webp",
+            "tmp_name": "C:\\xampp\\tmp\\php1E2B.tmp",
+            "error": 0,
+            "size": 149870
+        }
+    },
+    "REQUEST_METHOD": "POST"
+}
+{
+    "POST": {
+        "nombre": "Azur Lane"
+    },
+    "FILES": {
+        "imagen_serie": {
+            "name": "9527e4234067f57bca98191e3a664f824ffc09582b45a74f262c44f506e08152.jpg",
+            "type": "image\/jpeg",
+            "tmp_name": "C:\\xampp\\tmp\\php9C4.tmp",
+            "error": 0,
+            "size": 1139680
+        }
+    },
+    "REQUEST_METHOD": "POST"
+}
+{
+    "POST": {
+        "nombre": "Rent a Girlfriend"
+    },
+    "FILES": {
+        "imagen_serie": {
+            "name": "MV5BNThiMDM2MTktNGMwYi00NTY3LWEyMzQtNDg1NDBlYWIwYTU3XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+            "type": "image\/jpeg",
+            "tmp_name": "C:\\xampp\\tmp\\php1360.tmp",
+            "error": 0,
+            "size": 230247
+        }
+    },
+    "REQUEST_METHOD": "POST"
+}

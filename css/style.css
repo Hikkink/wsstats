@@ -1,0 +1,432 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+body {
+    background-color: #0b0510;
+    color: #e0d8f0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    /* Fondo estilo escritorio */
+    background-image: radial-gradient(circle at top right, #2a0b4e 0%, #0b0510 60%);
+}
+
+/* --- BARRA SUPERIOR --- */
+#top-bar {
+    height: 25px;
+    background: rgba(15, 5, 25, 0.9);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    font-size: 13px;
+    border-bottom: 1px solid #5a189a;
+    box-shadow: 0 2px 10px rgba(123, 44, 191, 0.4);
+    z-index: 1000;
+}
+
+.top-right i { margin-left: 15px; cursor: pointer; color: #c77dff; }
+
+/* --- CONTENEDOR PRINCIPAL --- */
+#workspace {
+    display: flex;
+    flex-grow: 1;
+    position: relative;
+}
+
+/* --- DOCK IZQUIERDO --- */
+#ubuntu-dock {
+    width: 60px;
+    background: rgba(20, 10, 30, 0.6);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid #7b2cbf;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+    z-index: 100;
+}
+
+.dock-item {
+    width: 45px;
+    height: 45px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #9d4edd;
+}
+
+.dock-item:hover {
+    background: rgba(123, 44, 191, 0.4);
+    color: #e0aaff;
+    box-shadow: 0 0 15px #7b2cbf;
+}
+
+.dock-separator {
+    width: 30px;
+    height: 1px;
+    background: #5a189a;
+    margin: 10px 0;
+}
+
+/* Botón principal imagen (boton.png) - Autoajustable */
+.start-btn {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.start-btn img {
+    max-width: 45px;  /* Límite máximo de ancho */
+    max-height: 45px; /* Límite máximo de alto */
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Esto obliga a la imagen a encajar sin deformarse */
+    transition: 0.3s;
+    filter: drop-shadow(0 0 5px #c77dff); /* Le da un brillito neón al logo */
+}
+
+.start-btn:hover img {
+    filter: drop-shadow(0 0 15px #c77dff);
+    transform: scale(1.1);
+}
+
+/* --- MENÚ INICIO --- */
+#start-menu {
+    position: absolute;
+    left: 65px;
+    top: 10px;
+    width: 250px;
+    background: rgba(30, 15, 50, 0.95);
+    border: 1px solid #7b2cbf;
+    box-shadow: 0 0 20px #5a189a;
+    border-radius: 8px;
+    padding: 15px;
+    z-index: 999;
+}
+
+#start-menu.hidden { display: none; }
+
+#start-menu h3 {
+    color: #e0aaff;
+    margin-bottom: 10px;
+    font-size: 14px;
+    border-bottom: 1px solid #7b2cbf;
+    padding-bottom: 5px;
+}
+
+#start-menu ul li {
+    list-style: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 14px;
+}
+
+#start-menu ul li i { margin-right: 10px; color: #c77dff; }
+#start-menu ul li:hover { background: rgba(90, 24, 154, 0.5); border-radius: 5px; }
+
+/* --- ESCRITORIO Y VENTANAS --- */
+#desktop {
+    flex-grow: 1;
+    position: relative;
+    padding: 20px;
+}
+
+.window {
+    position: absolute;
+    width: 400px;
+    background: rgba(15, 5, 25, 0.95);
+    border: 1px solid #7b2cbf;
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(90, 24, 154, 0.6);
+    overflow: hidden;
+    z-index: 10;
+}
+
+.window.hidden { display: none; }
+
+.window-header {
+    background: linear-gradient(90deg, #3c096c 0%, #240046 100%);
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: move; /* Cursor de arrastre */
+    user-select: none;
+}
+
+/* Botón cerrar tipo Mac/Ubuntu */
+.close-btn {
+    background: #ff0055;
+    border: none;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.close-btn:hover { box-shadow: 0 0 8px #ff0055; }
+
+.window-content { padding: 20px; }
+
+/* --- FORMULARIOS NEON --- */
+form label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #c77dff;
+}
+
+.neon-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: 1px solid #5a189a;
+    padding: 8px;
+    border-radius: 4px;
+    outline: none;
+    transition: 0.3s;
+}
+.neon-input:focus { border-color: #e0aaff; box-shadow: 0 0 8px #9d4edd; }
+
+.neon-btn {
+    width: 100%;
+    margin-top: 20px;
+    background: transparent;
+    color: #e0aaff;
+    border: 1px solid #9d4edd;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(123, 44, 191, 0.3) inset;
+    transition: 0.3s;
+}
+.neon-btn:hover {
+    background: #5a189a;
+    color: #fff;
+    box-shadow: 0 0 15px #9d4edd;
+}
+
+.colores-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    background: rgba(36, 0, 70, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #5a189a;
+}
+.colores-grid label { margin: 0; cursor: pointer; color: #fff; }
+
+.mensaje {
+    margin-top: 15px;
+    font-size: 13px;
+    text-align: center;
+}
+/* --- DASHBOARDS DE ESTADISTICAS --- */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.stat-card {
+    background: rgba(20, 5, 40, 0.7);
+    border: 1px solid #7b2cbf;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.stat-card h3 {
+    color: #e0aaff;
+    font-size: 14px;
+    border-bottom: 1px solid #5a189a;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.stat-card p {
+    font-size: 13px;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+/* Textos destacados */
+.text-win { color: #00ff88; font-weight: bold; }
+.text-loss { color: #ff0055; font-weight: bold; }
+.text-neon { color: #c77dff; font-size: 24px; text-align: center; display: block; text-shadow: 0 0 10px #c77dff; }
+
+/* Series e Imágenes en el Meta */
+.series-meta-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+.series-card {
+    flex: 1;
+    text-align: center;
+    background: #1a0b2e;
+    border-radius: 5px;
+    padding: 10px;
+    border: 1px solid #5a189a;
+}
+.series-card img {
+    max-width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+.deck-rank {
+    background: rgba(123, 44, 191, 0.2);
+    padding: 8px;
+    border-left: 3px solid #00ff88;
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+/* --- MINIATURAS DE DECKS --- */
+.deck-thumb {
+    width: 25px;
+    height: 25px;
+    object-fit: cover;
+    border-radius: 4px;
+    vertical-align: middle;
+    margin-right: 8px;
+    border: 1px solid #c77dff;
+    box-shadow: 0 0 5px rgba(199, 125, 255, 0.5);
+}
+
+.deck-rank-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+/* =========================================
+   MEJORAS ESTÉTICAS PERFIL JUGADOR
+   ========================================= */
+
+/* Barra de Winrate */
+.wr-container {
+    text-align: center;
+    padding: 10px 0;
+}
+.wr-percentage {
+    font-size: 32px;
+    font-weight: bold;
+    color: #00ff88;
+    text-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+    margin-bottom: 10px;
+    display: block;
+}
+.wr-bar-bg {
+    width: 100%;
+    height: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    border: 1px solid #5a189a;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+.wr-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c77dff 0%, #00ff88 100%);
+    box-shadow: 0 0 10px #00ff88;
+    transition: width 1s ease-in-out;
+}
+.wr-stats-text {
+    font-size: 14px;
+    color: #e0aaff;
+    letter-spacing: 1px;
+}
+
+/* Tarjetas de Decks en el Perfil */
+.profile-deck-card {
+    display: flex;
+    align-items: center;
+    background: rgba(30, 15, 50, 0.8);
+    border-left: 4px solid #c77dff;
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+.profile-deck-card.best { border-left-color: #00ff88; }
+.profile-deck-card.worst { border-left-color: #ff0055; }
+
+.profile-deck-img {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 12px;
+    border: 1px solid #7b2cbf;
+}
+.profile-deck-img.default {
+    background: #1a0b2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #5a189a;
+    font-size: 20px;
+}
+.profile-deck-info {
+    flex-grow: 1;
+}
+.profile-deck-info .label {
+    font-size: 11px;
+    color: #9d4edd;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: block;
+}
+.profile-deck-info .name {
+    font-size: 14px;
+    color: #fff;
+    font-weight: bold;
+    margin: 2px 0;
+    display: block;
+}
+.profile-deck-info .stats {
+    font-size: 12px;
+    color: #e0aaff;
+}
+
+/* Tarjetas Némesis */
+.nemesis-card {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 0, 85, 0.1);
+    border: 1px solid rgba(255, 0, 85, 0.3);
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+.nemesis-card .nemesis-name {
+    color: #ff0055;
+    font-weight: bold;
+    font-size: 15px;
+    display: block;
+}
+.nemesis-card .nemesis-losses {
+    color: #ffaaaa;
+    font-size: 13px;
+}

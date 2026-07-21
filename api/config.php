@@ -9,12 +9,14 @@ if (file_exists($config_file)) {
     
     define('DB_HOST', $config['host'] ?? 'localhost');
     define('DB_NAME', $config['dbname'] ?? 'weiss');
+	define('DB_PORT', $config['port'] ?? '3306');
     define('DB_USER', $config['user'] ?? 'root');
     define('DB_PASS', $config['pass'] ?? '');
 } else {
     // Valores por defecto
     define('DB_HOST', 'localhost');
-    define('DB_NAME', 'weiss');
+    define('DB_NAME', 'weiss');}
+	define('DB_PORT', '3306');
     define('DB_USER', 'root');
     define('DB_PASS', '');
 }

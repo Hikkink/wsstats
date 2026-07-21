@@ -62,32 +62,34 @@
             <!-- ESCRITORIO (Contenedor de Ventanas) -->
             <main id="desktop">
                 
-                <!-- 1. VENTANA: CONFIGURACIÓN BD -->
-                <div id="window-settings" class="window hidden">
-                    <div class="window-header">
-                        <span><i class="fas fa-cog"></i> Configuración MySQL</span>
-                        <button class="close-btn" onclick="closeWindow('window-settings')"></button>
-                    </div>
-                    <div class="window-content">
-                        <form id="form-config" onsubmit="submitForm(event, 'api/save_config.php', 'form-config')">
-                            <label>IP / Host:</label>
-                            <input type="text" name="host" value="127.0.0.1" required class="neon-input">
-                            
-                            <label>Nombre BD:</label>
-                            <input type="text" name="dbname" value="weiss_stats" required class="neon-input">
-                            
-                            <label>Usuario:</label>
-                            <input type="text" name="user" value="root" required class="neon-input">
-                            
-                            <label>Contraseña:</label>
-                            <input type="password" name="pass" class="neon-input">
-                            
-                            <button type="submit" class="neon-btn"><i class="fas fa-save"></i> Guardar Configuración</button>
-                        </form>
-                        <div id="msg-form-config" class="mensaje"></div>
-                    </div>
-                </div>
-
+              <!-- 1. VENTANA: CONFIGURACIÓN BD -->
+<div id="window-settings" class="window hidden">
+    <div class="window-header">
+        <span><i class="fas fa-cog"></i> Configuración MySQL</span>
+        <button class="close-btn" onclick="closeWindow('window-settings')"></button>
+    </div>
+    <div class="window-content">
+        <form id="form-config" onsubmit="submitForm(event, 'api/save_config.php', 'form-config')">
+            <label>IP / Host:</label>
+            <input type="text" name="host" value="127.0.0.1" required class="neon-input">
+            
+            <label>Puerto:</label>
+            <input type="number" name="port" value="3306" required class="neon-input" min="1" max="65535">
+            
+            <label>Nombre BD:</label>
+            <input type="text" name="dbname" value="weiss_stats" required class="neon-input">
+            
+            <label>Usuario:</label>
+            <input type="text" name="user" value="root" required class="neon-input">
+            
+            <label>Contraseña:</label>
+            <input type="password" name="pass" class="neon-input">
+            
+            <button type="submit" class="neon-btn"><i class="fas fa-save"></i> Guardar Configuración</button>
+        </form>
+        <div id="msg-form-config" class="mensaje"></div>
+    </div>
+</div>
                 <!-- 2. VENTANA: AÑADIR SERIE -->
                 <div id="window-add-series" class="window hidden">
                     <div class="window-header">

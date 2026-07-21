@@ -1,12 +1,12 @@
 FROM php:8.2-apache
 
-# Instalar extensiones necesarias
+# Debug: ver MPM activos
+RUN apache2ctl -M | grep mpm
+
+# Instalar extensiones
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Copiar tu proyecto
 COPY . /var/www/html/
-
-# Ajustar permisos
 RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80

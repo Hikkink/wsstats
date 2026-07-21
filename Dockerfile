@@ -1,20 +1,14 @@
-FROM php:8.2-apache
+FROM php:8.2-apache-bookworm
 
-# DESHABILITAR TODOS los MPM primero
-RUN a2dismod mpm_event || true && \
-    a2dismod mpm_worker || true && \
-    a2dismod mpm_prefork || true
-
-# HABILITAR SOLO mpm_prefork
-RUN a2enmod mpm_prefork
-
-# Instalar extensiones necesarias
+# No tocar MPM
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Copiar tu proyecto
+# Copiar proyecto
 COPY . /var/www/html/
 
-# Ajustar permisos
+# Si tienes archivos en public/
+# RUN mv /var/www/html/* /var/www/html/public/ 2>/dev/null || true
+
 RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80

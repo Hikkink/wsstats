@@ -10,7 +10,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Obtener datos del POST
         $serie_id = isset($_POST['serie_id']) ? intval($_POST['serie_id']) : 0;
         $nombre = isset($_POST['nombre']) ? trim($_POST['nombre']) : '';
-        
+        $decklist = isset($_POST['decklist']) ? trim($_POST['decklist']) : '';
+
         // Los colores vienen como un Array (ej: ['RED', 'BLUE']) desde los checkboxes
         $colores = isset($_POST['colores']) ? $_POST['colores'] : [];
         
@@ -62,8 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         
         // Insertar deck
-        $stmt = $pdo->prepare("INSERT INTO decks (serie_id, nombre, colores) VALUES (?, ?, ?)");
-        $resultado = $stmt->execute([$serie_id, $nombre, $colores_string]);
+        $stmt = $pdo->prepare("INSERT INTO decks (serie_id, nombre, colores, decklist) VALUES (?, ?, ?, ?)");
+        $resultado = $stmt->execute([$serie_id, $nombre, $colores_string, $decklist]);
         
         if ($resultado) {
             // Obtener el nombre de la serie para la respuesta

@@ -18,6 +18,11 @@ updateClock();
 // 2. MANEJO DE MENÚ Y VENTANAS
 let highestZIndex = 10;
 
+// Variables globales para el decklist y el deck random
+let currentDeckName = '';
+let currentDecklist = '';
+let lastRandomDeck = null;
+
 function toggleMenu() {
     document.getElementById('start-menu').classList.toggle('hidden');
 }
@@ -83,7 +88,8 @@ function openMatchWindow() {
         .catch(error => console.error('Error loading players:', error));
 
     // Cargar Series en los dos selects (P1 y P2)
-    fetch('api/get_series.php')
+    // Devuelve la promesa para poder preseleccionar un deck desde "Deck Random"
+    return fetch('api/get_series.php')
         .then(response => response.json())
         .then(data => {
             let options = '<option value="">Selecciona Serie</option>';
@@ -235,8 +241,8 @@ function loadDecks(serieId, targetSelectId) {
     }
 
     select.innerHTML = '<option value="">Buscando decks...</option>';
-    
-    fetch(`api/get_decks_by_series.php?serie_id=${serieId}`)
+
+    return fetch(`api/get_decks_by_series.php?serie_id=${serieId}`)
         .then(response => response.json())
         .then(data => {
             if (!data || data.length === 0) {
@@ -492,6 +498,10 @@ function loadDeckStats(deckId) {
                 return;
             }
 
+            // Guardar decklist global para poder descargarla como .txt
+            currentDeckName = data.info.deck_nombre;
+            currentDecklist = data.info.decklist || '';
+
             // Función para mostrar miniatura (si existe)
             const getThumb = (img) => {
                 if (img) {
@@ -516,6 +526,14 @@ function loadDeckStats(deckId) {
                             <i class="fas fa-info-circle"></i> ${data.mensaje}
                         </p>
                         <p style="color: #888; margin-top: 10px;">Juega partidas con este deck para ver estadísticas detalladas</p>
+                        ${data.info.decklist ? `
+                        <div style="margin-top: 15px; text-align: left;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <strong style="color: #e0aaff; font-size: 14px;">Decklist:</strong>
+                                <button class="btn-download" onclick="downloadDecklist()"><i class="fas fa-download"></i> Descargar .txt</button>
+                            </div>
+                            <pre class="decklist-box">${escapeHtml(data.info.decklist)}</pre>
+                        </div>` : ''}
                     </div>
                 `;
                 return;
@@ -589,10 +607,18 @@ function loadDeckStats(deckId) {
                     <div style="text-align: center;">
                         <span class="text-neon" style="font-size: 28px;">${data.stats.winrate}%</span>
                         <p style="margin: 5px 0;">
-                            ${data.stats.wins} Victorias / ${data.stats.losses} Derrotas 
+                            ${data.stats.wins} Victorias / ${data.stats.losses} Derrotas
                             <span style="color: #888; font-size: 12px;">(${data.stats.total} partidas)</span>
                         </p>
                     </div>
+                    ${data.info.decklist ? `
+                    <div style="margin-top: 15px; text-align: left;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                            <strong style="color: #e0aaff; font-size: 14px;">Decklist:</strong>
+                            <button class="btn-download" onclick="downloadDecklist()"><i class="fas fa-download"></i> Descargar .txt</button>
+                        </div>
+                        <pre class="decklist-box">${escapeHtml(data.info.decklist)}</pre>
+                    </div>` : ''}
                 </div>
 
                 <!-- Matchups Fuerte -->
@@ -928,6 +954,8 @@ function openEditDeckSelector() {
             document.getElementById('edit-deck-id').value = '';
             document.getElementById('edit-deck-nombre').value = '';
             document.getElementById('edit-deck-colores-container').innerHTML = '';
+            document.getElementById('edit-deck-decklist').value = '';
+            document.getElementById('btn-delete-deck').style.display = 'none';
             document.getElementById('msg-form-edit-deck').innerHTML = '';
         })
         .catch(error => {
@@ -941,6 +969,8 @@ function loadDeckForEdit(deckId) {
         document.getElementById('edit-deck-id').value = '';
         document.getElementById('edit-deck-nombre').value = '';
         document.getElementById('edit-deck-colores-container').innerHTML = '';
+        document.getElementById('edit-deck-decklist').value = '';
+        document.getElementById('btn-delete-deck').style.display = 'none';
         return;
     }
     // Usamos el mismo endpoint con parámetro id
@@ -953,6 +983,8 @@ function loadDeckForEdit(deckId) {
             }
             document.getElementById('edit-deck-id').value = data.id;
             document.getElementById('edit-deck-nombre').value = data.nombre;
+            document.getElementById('edit-deck-decklist').value = data.decklist || '';
+            document.getElementById('btn-delete-deck').style.display = 'block';
 
             const colores = data.colores ? data.colores.split(',') : [];
             const container = document.getElementById('edit-deck-colores-container');
@@ -980,6 +1012,171 @@ function loadDeckForEdit(deckId) {
         .catch(error => {
             console.error('Error:', error);
             alert('Error al cargar el deck');
+        });
+}
+
+// --- 10. DECKLIST, ELIMINAR DECK Y DECK RANDOM ---
+
+// Escapar HTML para pintar contenido del usuario sin romper la página
+function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+}
+
+// Descargar el decklist guardado como documento .txt (listo para el juego)
+function downloadDecklist() {
+    if (!currentDecklist) {
+        alert('Este deck no tiene decklist guardada');
+        return;
+    }
+    const blob = new Blob([currentDecklist], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = (currentDeckName || 'deck') + '.txt';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+}
+
+// Eliminar un deck (junto con sus partidas registradas)
+function deleteDeck() {
+    const id = document.getElementById('edit-deck-id').value;
+    const nombre = document.getElementById('edit-deck-nombre').value;
+    if (!id) return;
+
+    if (!confirm(`¿Eliminar el deck "${nombre}" y TODAS sus partidas registradas?\nEsta acción no se puede deshacer.`)) return;
+
+    const formData = new FormData();
+    formData.append('id', id);
+
+    fetch('api/delete_deck.php', { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                alert('✅ ' + data.success);
+                closeWindow('window-edit-deck');
+                openEditDeckSelector(); // recargar la lista de decks
+            } else {
+                alert('❌ ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting deck:', error);
+            alert('❌ Error de conexión.');
+        });
+}
+
+// --- DECK RANDOM ---
+function openRandomDeckWindow() {
+    openWindow('window-random-deck');
+    pickRandomDeck();
+}
+
+function pickRandomDeck() {
+    const result = document.getElementById('random-deck-result');
+    result.innerHTML = '<p class="text-neon" style="font-size:16px;"><i class="fas fa-spinner fa-spin"></i> Barajando...</p>';
+
+    // Evitar repetir el mismo deck en el siguiente "Otro"
+    const url = lastRandomDeck ? `api/get_random_deck.php?exclude=${lastRandomDeck.id}` : 'api/get_random_deck.php';
+
+    fetch(url)
+        .then(r => r.json())
+        .then(data => {
+            if (data.error) {
+                result.innerHTML = `<p class="text-error">${data.error}</p>`;
+                return;
+            }
+            lastRandomDeck = data;
+            renderRandomDeck(data);
+        })
+        .catch(error => {
+            result.innerHTML = '<p class="text-error">Error al cargar el deck</p>';
+            console.error('Error loading random deck:', error);
+        });
+}
+
+function renderRandomDeck(d) {
+    const img = d.imagen_url
+        ? `<img src="${d.imagen_url}" class="random-series-img" alt="Imagen de la serie">`
+        : '<div class="random-series-img default"><i class="fas fa-image"></i></div>';
+
+    const colores = d.colores ? `[${d.colores}]` : '';
+    const decklist = d.decklist
+        ? `<pre class="decklist-box">${escapeHtml(d.decklist)}</pre>`
+        : '<p style="color:#888; font-size:13px;">Sin decklist guardada</p>';
+
+    // Actualizar decklist global para poder descargarla desde esta ventana
+    currentDeckName = d.nombre;
+    currentDecklist = d.decklist || '';
+
+    document.getElementById('random-deck-result').innerHTML = `
+        <div class="random-card">
+            ${img}
+            <h3>${escapeHtml(d.nombre)}</h3>
+            <p style="color:#c77dff; font-size:14px;">${escapeHtml(d.serie_nombre)} ${colores}</p>
+            ${decklist}
+            <div class="random-actions">
+                <button class="neon-btn" onclick="pickRandomDeck()"><i class="fas fa-dice-d6"></i> Otro</button>
+                <button class="neon-btn" onclick="useRandomInMatch()"><i class="fas fa-gamepad"></i> Usar como P1</button>
+            </div>
+        </div>`;
+}
+
+// Llevar el deck aleatorio a la mesa como Player 1
+function useRandomInMatch() {
+    if (!lastRandomDeck) return;
+
+    openMatchWindow().then(() => {
+        document.getElementById('p1-serie-select').value = lastRandomDeck.serie_id;
+        loadDecks(lastRandomDeck.serie_id, 'p1-deck-select').then(() => {
+            document.getElementById('p1-deck-select').value = lastRandomDeck.id;
+        });
+    });
+    closeWindow('window-random-deck');
+}
+
+// --- 11. ACTUALIZAR BASE DE DATOS (botón de encendido) ---
+function updateDB() {
+    openWindow('window-db-update');
+    const result = document.getElementById('db-update-result');
+    result.innerHTML = '<p class="text-neon" style="font-size:16px;"><i class="fas fa-spinner fa-spin"></i> Verificando base de datos...</p>';
+
+    fetch('api/migrate_db.php')
+        .then(r => r.json())
+        .then(data => {
+            if (data.error) {
+                result.innerHTML = `<p class="text-error">❌ ${escapeHtml(data.error)}</p>`;
+                return;
+            }
+
+            const created = data.created_tables || [];
+            const added = data.added_columns || [];
+            const hayCambios = created.length > 0 || added.length > 0;
+
+            let cambios = '';
+            if (hayCambios) {
+                cambios = '<div class="db-change-list">';
+                created.forEach(t => {
+                    cambios += `<p class="text-win"><i class="fas fa-table"></i> Tabla <b>${escapeHtml(t)}</b> creada</p>`;
+                });
+                added.forEach(a => {
+                    cambios += `<p class="text-win"><i class="fas fa-columns"></i> Columna <b>${escapeHtml(a.column)}</b> añadida a <b>${escapeHtml(a.table)}</b></p>`;
+                });
+                cambios += '</div>';
+            }
+
+            const estado = hayCambios
+                ? `<span class="text-win" style="font-size:14px;"><i class="fas fa-check-circle"></i> ${escapeHtml(data.message)}</span>`
+                : '<span class="text-win" style="font-size:14px;"><i class="fas fa-check-circle"></i> ✓ Todo en orden</span>';
+
+            result.innerHTML = estado + cambios;
+        })
+        .catch(error => {
+            result.innerHTML = '<p class="text-error">Error de conexión.</p>';
+            console.error('Error updating DB:', error);
         });
 }
 

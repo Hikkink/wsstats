@@ -430,3 +430,122 @@ form label {
     color: #ffaaaa;
     font-size: 13px;
 }
+/* =========================================
+   DECKLIST + ELIMINAR DECK + DECK RANDOM
+   ========================================= */
+
+/* Textarea del decklist (editar/crear deck) */
+.decklist-input {
+    min-height: 120px;
+    font-family: 'Ubuntu Mono', 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+/* Caja de solo lectura para mostrar el decklist */
+.decklist-box {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #5a189a;
+    border-radius: 4px;
+    padding: 10px;
+    font-family: 'Ubuntu Mono', 'Consolas', monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #e0d8f0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 180px;
+    overflow-y: auto;
+    margin: 0;
+}
+
+/* Botón peligro (Eliminar Deck) */
+.neon-btn-danger {
+    border-color: #ff0055;
+    color: #ff6b8d;
+    box-shadow: 0 0 10px rgba(255, 0, 85, 0.3) inset;
+}
+.neon-btn-danger:hover {
+    background: #ff0055;
+    border-color: #ff0055;
+    color: #fff;
+    box-shadow: 0 0 15px #ff0055;
+}
+
+/* Botón pequeño "Descargar .txt" */
+.btn-download {
+    background: rgba(0, 255, 136, 0.1);
+    color: #00ff88;
+    border: 1px solid #00ff88;
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.btn-download:hover {
+    background: #00ff88;
+    color: #0b0510;
+    box-shadow: 0 0 10px #00ff88;
+}
+
+/* Ventana Deck Random */
+.random-card {
+    text-align: center;
+    background: rgba(20, 5, 40, 0.7);
+    border: 1px solid #7b2cbf;
+    border-radius: 8px;
+    padding: 12px;
+}
+.random-card h3 {
+    color: #e0aaff;
+    margin: 8px 0 2px;
+    font-size: 16px;
+}
+.random-series-img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #7b2cbf;
+    box-shadow: 0 0 12px rgba(123, 44, 191, 0.5);
+}
+.random-series-img.default {
+    background: #1a0b2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #5a189a;
+    font-size: 40px;
+}
+.random-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+.random-actions .neon-btn {
+    flex: 1;
+    margin-top: 0;
+}
+
+/* Lista de cambios de la ventana Base de Datos */
+.db-change-list {
+    margin-top: 12px;
+    background: rgba(20, 5, 40, 0.7);
+    border: 1px solid #7b2cbf;
+    border-radius: 8px;
+    padding: 10px 12px;
+}
+.db-change-list p {
+    font-size: 13px;
+    margin-bottom: 5px;
+    color: #e0d8f0;
+}
+.db-change-list p i {
+    margin-right: 6px;
+}
+.db-change-list p:last-child {
+    margin-bottom: 0;
+}

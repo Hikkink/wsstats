@@ -13,9 +13,10 @@ try {
     }
 
     // 1. Información Básica del Deck
-    $qInfo = "SELECT 
+    $qInfo = "SELECT
                d.nombre as deck_nombre,
                d.colores,
+               d.decklist,
                s.nombre as serie_nombre,
                s.imagen_url
               FROM decks d

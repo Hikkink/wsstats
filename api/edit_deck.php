@@ -27,6 +27,8 @@ try {
     $actualizar_nombre = !empty($nuevo_nombre);
     $nuevos_colores = isset($_POST['colores']) ? $_POST['colores'] : null;
     $actualizar_colores = isset($_POST['colores']); // permite vacío
+    $nuevo_decklist = isset($_POST['decklist']) ? trim($_POST['decklist']) : '';
+    $actualizar_decklist = isset($_POST['decklist']); // permite vacío
 
     if ($actualizar_nombre) {
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM decks WHERE nombre = ? AND id != ?");
@@ -44,6 +46,10 @@ try {
         $colores_str = is_array($nuevos_colores) ? implode(',', $nuevos_colores) : '';
         $set[] = "colores = ?";
         $params[] = $colores_str;
+    }
+    if ($actualizar_decklist) {
+        $set[] = "decklist = ?";
+        $params[] = $nuevo_decklist;
     }
     if (empty($set)) {
         echo json_encode(['error' => 'No hay datos para actualizar']);

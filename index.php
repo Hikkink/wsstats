@@ -20,7 +20,7 @@
         <div class="top-right">
             <i class="fas fa-wifi"></i>
             <i class="fas fa-volume-up"></i>
-            <i class="fas fa-power-off"></i>
+            <i class="fas fa-power-off" onclick="updateDB()" title="Actualizar base de datos"></i>
         </div>
     </header>
 
@@ -55,6 +55,7 @@
                     <li onclick="openWindow('window-add-player')"><i class="fas fa-user-plus"></i> Añadir Jugador</li>
                     <li onclick="openDeckWindow()"><i class="fas fa-layer-group"></i> Crear Deck</li>
                     <li onclick="openEditDeckSelector()"><i class="fas fa-pen"></i> Editar Deck</li>
+                    <li onclick="openRandomDeckWindow()"><i class="fas fa-dice"></i> Elegir Deck Random</li>
                     <li style="border-top: 1px solid #7b2cbf; margin-top: 5px; padding-top: 10px;" onclick="openWindow('window-settings')"><i class="fas fa-database"></i> Configuración BD</li>
                 </ul>
             </div>
@@ -151,6 +152,9 @@
                                 <label><input type="checkbox" name="colores[]" value="GREEN"> 🟢 Green</label>
                                 <label><input type="checkbox" name="colores[]" value="YELLOW"> 🟡 Yellow</label>
                             </div>
+
+                            <label>Decklist (lista de cartas):</label>
+                            <textarea name="decklist" class="neon-input decklist-input" rows="6" placeholder="Ej:&#10;3x Sinon Sniper&#10;4x Asuna, Flash"></textarea>
 
                             <button type="submit" class="neon-btn"><i class="fas fa-plus"></i> Guardar Deck</button>
                         </form>
@@ -298,9 +302,39 @@
             <input type="text" name="nombre" id="edit-deck-nombre" required class="neon-input">
             <label>Colores:</label>
             <div class="colores-grid" id="edit-deck-colores-container"></div>
+            <label>Decklist (lista de cartas):</label>
+            <textarea name="decklist" id="edit-deck-decklist" class="neon-input decklist-input" rows="6"></textarea>
             <button type="submit" class="neon-btn"><i class="fas fa-save"></i> Actualizar Deck</button>
         </form>
+        <button type="button" class="neon-btn neon-btn-danger" id="btn-delete-deck" style="display:none; margin-top:10px;" onclick="deleteDeck()"><i class="fas fa-trash"></i> Eliminar Deck</button>
         <div id="msg-form-edit-deck" class="mensaje"></div>
+    </div>
+</div>
+
+<!-- ELEGIR DECK RANDOM -->
+<div id="window-random-deck" class="window hidden" style="width: 420px;">
+    <div class="window-header">
+        <span><i class="fas fa-dice"></i> Elegir Deck Random</span>
+        <button class="close-btn" onclick="closeWindow('window-random-deck')"></button>
+    </div>
+    <div class="window-content">
+        <div id="random-deck-result">
+            <p class="text-neon" style="font-size:16px;"><i class="fas fa-dice"></i> Toca el dado para elegir un deck</p>
+        </div>
+        <button class="neon-btn" style="margin-top:15px;" onclick="pickRandomDeck()"><i class="fas fa-dice-d6"></i> Deck Aleatorio</button>
+    </div>
+</div>
+
+<!-- ACTUALIZAR BASE DE DATOS -->
+<div id="window-db-update" class="window hidden" style="width: 400px;">
+    <div class="window-header">
+        <span><i class="fas fa-database"></i> Base de Datos</span>
+        <button class="close-btn" onclick="closeWindow('window-db-update')"></button>
+    </div>
+    <div class="window-content">
+        <div id="db-update-result">
+            <p class="text-neon" style="font-size:16px;"><i class="fas fa-spinner fa-spin"></i> Verificando...</p>
+        </div>
     </div>
 </div>
 

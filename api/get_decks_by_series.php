@@ -23,7 +23,7 @@ try {
     // Caso 2: Obtener decks por serie_id
     if (isset($_GET['serie_id']) && is_numeric($_GET['serie_id'])) {
         $serie_id = (int)$_GET['serie_id'];
-        $stmt = $pdo->prepare("SELECT id, nombre, colores FROM decks WHERE serie_id = ? ORDER BY nombre ASC");
+        $stmt = $pdo->prepare("SELECT id, nombre, colores, decklist FROM decks WHERE serie_id = ? ORDER BY nombre ASC");
         $stmt->execute([$serie_id]);
         $decks = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($decks);
@@ -32,7 +32,7 @@ try {
     
     // Caso 3: Obtener todos los decks (sin parámetros)
     $stmt = $pdo->query("
-        SELECT d.id, d.nombre, d.colores, s.nombre as serie_nombre
+        SELECT d.id, d.nombre, d.colores, d.decklist, s.nombre as serie_nombre
         FROM decks d
         LEFT JOIN series s ON d.serie_id = s.id
         ORDER BY s.nombre, d.nombre

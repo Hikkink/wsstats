@@ -36,12 +36,6 @@ if (!$config) {
 $config_mostrar = $config;
 $config_mostrar['pass'] = '******';
 
-responderJSON([
-    'success' => true,
-    'config' => $config_mostrar,
-    'testing_connection' => true
-]);
-
 // Intentar conectar
 try {
     $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['dbname']};charset=utf8mb4";

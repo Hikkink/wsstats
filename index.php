@@ -18,9 +18,14 @@
         <!-- Aquí saldrá Fecha y Hora -->
         <div class="top-center" id="clock">Cargando fecha...</div> 
         <div class="top-right">
-            <i class="fas fa-wifi"></i>
+            <i class="fas fa-wifi" id="wifi-icon" onclick="openWindow('window-settings')" title="Configuración BD"></i>
             <i class="fas fa-volume-up"></i>
             <i class="fas fa-power-off" onclick="updateDB()" title="Actualizar base de datos"></i>
+            <!-- Tooltip de estado de la BD -->
+            <div id="db-tooltip" class="db-tooltip hidden">
+                <strong id="db-tooltip-title">Comprobando...</strong>
+                <div id="db-tooltip-body"></div>
+            </div>
         </div>
     </header>
 
@@ -56,7 +61,6 @@
                     <li onclick="openDeckWindow()"><i class="fas fa-layer-group"></i> Crear Deck</li>
                     <li onclick="openEditDeckSelector()"><i class="fas fa-pen"></i> Editar Deck</li>
                     <li onclick="openRandomDeckWindow()"><i class="fas fa-dice"></i> Elegir Deck Random</li>
-                    <li style="border-top: 1px solid #7b2cbf; margin-top: 5px; padding-top: 10px;" onclick="openWindow('window-settings')"><i class="fas fa-database"></i> Configuración BD</li>
                 </ul>
             </div>
 

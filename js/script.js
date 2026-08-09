@@ -286,12 +286,17 @@ function submitForm(event, url, formId) {
         // Limpiar el formulario si el registro fue exitoso (excepto configuración)
         if(formId !== 'form-config') {
             form.reset();
-            
+
             // Si estábamos en el match, resetear los select de decks
             if(formId === 'form-match') {
                 document.getElementById('p1-deck-select').innerHTML = '<option value="">Seleccione Serie primero</option>';
                 document.getElementById('p2-deck-select').innerHTML = '<option value="">Seleccione Serie primero</option>';
             }
+        }
+
+        // Refrescar el estado del icono wifi al guardar la configuración de BD
+        if(formId === 'form-config') {
+            checkDBStatus();
         }
     })
     .catch(error => {
@@ -1179,4 +1184,65 @@ function updateDB() {
             console.error('Error updating DB:', error);
         });
 }
+
+// --- 12. ESTADO DE LA BD EN EL ICONO WIFI ---
+// Un clic en el wifi abre la configuración (ver index.php). Al pasar el mouse
+// se muestra un tooltip con el estado real de conexión.
+let dbStatusCache = null;
+
+function checkDBStatus() {
+    fetch('api/dbtest.php')
+        .then(r => r.json())
+        .then(data => {
+            dbStatusCache = data;
+            const icon = document.getElementById('wifi-icon');
+            const title = document.getElementById('db-tooltip-title');
+            const body = document.getElementById('db-tooltip-body');
+
+            if (data.success && data.connection) {
+                icon.style.color = '#00ff88';
+                title.textContent = '✅ BD Conectada';
+                title.style.color = '#00ff88';
+                body.innerHTML = `Base de datos: <b>${escapeHtml(data.database)}</b><br>
+                                  Servidor: ${escapeHtml(data.version)}<br>
+                                  Host: ${escapeHtml(data.config.host)}:${escapeHtml(data.config.port)}`;
+            } else {
+                icon.style.color = '#ff0055';
+                title.textContent = '❌ BD Desconectada';
+                title.style.color = '#ff0055';
+                body.innerHTML = escapeHtml(data.error || 'No hay conexión con la base de datos');
+            }
+        })
+        .catch(error => {
+            const icon = document.getElementById('wifi-icon');
+            icon.style.color = '#ff0055';
+            const title = document.getElementById('db-tooltip-title');
+            title.textContent = '❌ Sin conexión';
+            title.style.color = '#ff0055';
+            document.getElementById('db-tooltip-body').textContent = 'No se pudo contactar con el servidor.';
+            console.error('Error checking DB status:', error);
+        });
+}
+
+// Al cargar la página: comprobar estado y preparar el tooltip
+document.addEventListener('DOMContentLoaded', () => {
+    const icon = document.getElementById('wifi-icon');
+    if (!icon) return;
+
+    const tooltip = document.getElementById('db-tooltip');
+
+    // Comprobar estado una vez al cargar
+    checkDBStatus();
+
+    // Mostrar el tooltip al pasar el mouse (refrescando el estado si no hay cache)
+    icon.addEventListener('mouseenter', () => {
+        if (dbStatusCache === null) checkDBStatus();
+        tooltip.classList.remove('hidden');
+    });
+
+    // Ocultar al salir
+    icon.addEventListener('mouseleave', () => {
+        tooltip.classList.add('hidden');
+    });
+});
 

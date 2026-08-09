@@ -30,7 +30,29 @@ body {
     z-index: 1000;
 }
 
+.top-right { position: relative; }
 .top-right i { margin-left: 15px; cursor: pointer; color: #c77dff; }
+
+/* Tooltip de estado de la BD (icono wifi) */
+.db-tooltip {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    width: 280px;
+    background: rgba(20, 8, 35, 0.98);
+    border: 1px solid #7b2cbf;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(123, 44, 191, 0.5);
+    padding: 10px 12px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #e0d8f0;
+    z-index: 2000;
+}
+.db-tooltip.hidden { display: none; }
+.db-tooltip strong { display: block; margin-bottom: 6px; font-size: 13px; }
+.db-tooltip .db-tooltip-sub { color: #9d4edd; font-size: 11px; margin-top: 6px; text-align: right; }
 
 /* --- CONTENEDOR PRINCIPAL --- */
 #workspace {

@@ -54,6 +54,13 @@ body {
 .db-tooltip strong { display: block; margin-bottom: 6px; font-size: 13px; }
 .db-tooltip .db-tooltip-sub { color: #9d4edd; font-size: 11px; margin-top: 6px; text-align: right; }
 
+/* Botón de backup SQL en la Configuración BD (link con aspecto neon-btn) */
+.backup-btn {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+}
+
 /* --- CONTENEDOR PRINCIPAL --- */
 #workspace {
     display: flex;

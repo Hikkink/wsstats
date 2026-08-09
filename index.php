@@ -93,6 +93,8 @@
             <button type="submit" class="neon-btn"><i class="fas fa-save"></i> Guardar Configuración</button>
         </form>
         <div id="msg-form-config" class="mensaje"></div>
+        <hr style="margin: 15px 0; border-color: #7b2cbf;">
+        <a href="api/backup_db.php" class="neon-btn backup-btn" title="Descarga un archivo .sql con toda la base de datos"><i class="fas fa-download"></i> Guardar Backup SQL</a>
     </div>
 </div>
                 <!-- 2. VENTANA: AÑADIR SERIE -->
